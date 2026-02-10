@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// MySQL connection
+
 const db = mysql.createConnection({
   host: mysql.railway.internal,
   user: root,
@@ -19,15 +19,12 @@ db.connect(err => {
   console.log("MySQL Connected");
 });
 
-// TEST GET API
 app.get("/users", (req, res) => {
   db.query("SELECT * FROM users", (err, result) => {
     if (err) return res.status(500).send(err);
     res.send(result);
   });
 });
-
-// LOGIN API
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
 
@@ -43,7 +40,6 @@ app.post("/login", (req, res) => {
   });
 });
 
-// REGISTER API
 app.post("/register", (req, res) => {
   const { email, password } = req.body;
 
@@ -59,7 +55,7 @@ app.post("/register", (req, res) => {
       return res.status(409).send({ message: "User already exists" });
     }
 
-    // insert new user
+
     const insertQuery =
       "INSERT INTO users (email, password) VALUES (?, ?)";
     db.query(insertQuery, [email, password], (err) => {
